@@ -51,7 +51,7 @@ EmployeeDirectory/
 
 ## Screenshots
 
-*(Add screenshots of the main UI, filter sidebar, and responsive views here!)*
+![img](Screenshot 2025-07-12 133345.png)
 
 ---
 
