@@ -1,0 +1,282 @@
+# AJACKUS Company Assignment: Technical Reference Document
+
+---
+
+This document provides a structured approach and helpful tips for completing the "Employee Directory Web Interface" assignment. Remember, the goal is to showcase your understanding of front-end development principles using HTML, CSS, JavaScript, and Freemarker templates.
+
+### 1. Understanding the Core Requirements
+
+Before diving into coding, thoroughly understand all aspects of the assignment:
+
+- **Technologies:** HTML, CSS, JavaScript (Vanilla recommended), Freemarker.
+- **Key Pages:** Dashboard (Employee List/Grid), Add/Edit Form.
+- **Data Handling:** Local JavaScript array, no backend interaction. Mock data loaded via Freemarker.
+- **Core Features:** Display, Add, Edit, Delete employees. Filter, Sort, Search, Pagination/Infinite Scroll.
+- **Design:** Responsive, clean UI/UX.
+- **Code Quality:** Clean, modular, commented.
+- **Submission:** GitHub repo with README, screenshots, reflection.
+- **Timeline:** 2 days turnaround.
+
+---
+
+### 2. Recommended Approach and Steps
+
+Break down the assignment into manageable chunks. Here's a suggested step-by-step approach:
+
+### Step 1: Project Setup and Basic Structure
+
+1. **Create Project Folder:**
+    
+    ```
+    employee-directory/
+    ├── src/main/resources/templates/  (For Freemarker templates)
+    ├── src/main/resources/static/    (For CSS and JS files)
+    ├── README.md
+    ```
+    
+    - **Note:** If you're not using a full Freemarker setup with a Java backend, you might just have an `index.html` file and your CSS/JS, and you'll simulate Freemarker's data injection. However, since the assignment explicitly mentions Freemarker templates, it's best to structure your project as if a Freemarker engine will process it. You'll likely need a simple Java or other server-side setup to run Freemarker or use a local Freemarker test environment. For the scope of this assignment, you'll primarily focus on the *template structure* and *how Freemarker would render it*, even if you're not setting up a full server.
+2. **Initial `index.ftlh` (Freemarker Template):**
+    - Create a basic Freemarker template (e.g., `dashboard.ftlh` or `index.ftlh`) in `src/main/resources/templates/`.
+    - Include placeholders for your CSS and JavaScript files.
+    
+    ```html
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Employee Directory</title>
+        <link rel="stylesheet" href="/static/css/style.css">
+    </head>
+    <body>
+        <div id="app">
+            </div>
+        <script src="/static/js/data.js"></script>
+        <script src="/static/js/app.js"></script>
+    </body>
+    </html>
+    ```
+    
+
+### Step 2: Mock Data and Freemarker Integration
+
+1. **Define Mock Data:**
+    - In your `data.js` file (or directly in your Freemarker template for simulation), create a JavaScript array of employee objects. This will be your in-memory database.
+    - **Example `data.js`:**
+        
+        ```jsx
+        const mockEmployees = [
+            { id: 1, firstName: 'John', lastName: 'Doe', email: 'john.doe@example.com', department: 'HR', role: 'Manager' },
+            { id: 2, firstName: 'Jane', lastName: 'Smith', email: 'jane.smith@example.com', department: 'IT', role: 'Developer' },
+            // ... more employees
+        ];
+        ```
+        
+    - **Freemarker Data Injection (Simulated):** The assignment mentions "mock data will be passed to the template" via `<#assign>`. If you're not running a full Freemarker server, you'll simulate this by loading `mockEmployees` from `data.js` directly into your client-side JavaScript. If you *are* using a Freemarker environment, your Java/server-side code would pass this data, and you'd access it in your `.ftlh` like:
+    For the purpose of the client-side assignment, you can just ensure `mockEmployees` from `data.js` is accessible globally or passed to your main JS module.
+        
+        ```
+        <#assign employees = mockEmployeeList>
+        ```
+        
+2. **Render Employee List using Freemarker:**
+    - In `dashboard.ftlh` (or `index.ftlh`), use Freemarker's `list` directive to iterate over your `employees` data and render a list/grid.
+    - Each employee card/row should include: Employee ID, First Name, Last Name, Email, Department, Role.
+    - Add "Edit" and "Delete" buttons for each employee. These buttons will be handled by JavaScript later.
+    - **Example `dashboard.ftlh` snippet:**
+        
+        ```html
+        <div id="employee-list-container">
+            <#list employees as employee>
+                <div class="employee-card" data-employee-id="${employee.id}">
+                    <h3>${employee.firstName} ${employee.lastName}</h3>
+                    <p>ID: ${employee.id}</p>
+                    <p>Email: ${employee.email}</p>
+                    <p>Department: ${employee.department}</p>
+                    <p>Role: ${employee.role}</p>
+                    <button class="edit-btn" data-id="${employee.id}">Edit</button>
+                    <button class="delete-btn" data-id="${employee.id}">Delete</button>
+                </div>
+            </#list>
+        </div>
+        ```
+        
+
+### Step 3: Dashboard Functionality (JavaScript)
+
+1. **Displaying Employees:**
+    - Your Freemarker template will initially render the list. Your JavaScript (`app.js`) will be responsible for *dynamically updating* this list when adding, editing, deleting, filtering, sorting, or searching.
+    - Load your `mockEmployees` array into `app.js`.
+2. **Delete Functionality:**
+    - Add event listeners to the "Delete" buttons.
+    - When a delete button is clicked:
+        - Get the `employeeId` from the button's `data-id` attribute.
+        - Remove the corresponding employee from your `mockEmployees` array.
+        - Re-render the employee list in the DOM.
+        - Implement graceful error handling (e.g., if no employee is selected, although in this case, the button is per employee).
+3. **Basic "Edit" Navigation:**
+    - Add event listeners to the "Edit" buttons.
+    - When an edit button is clicked, you'll need to navigate to (or display) the Add/Edit Form page, pre-filling the form with the selected employee's data. You can achieve this by:
+        - Hiding the dashboard and showing the form, passing the employee ID.
+        - Using URL parameters (e.g., `?editId=123`) if you're simulating multiple "pages" with a single HTML file and JavaScript routing.
+
+### Step 4: Add/Edit Form Page
+
+1. **Create `add-edit-form.ftlh` (or integrate into `dashboard.ftlh`):**
+    - Design an HTML form with fields: First Name, Last Name, Email, Department, Role.
+    - Include a "Save" button and a "Cancel" button.
+    - **Styling:** Apply CSS for a clean and user-friendly form.
+2. **JavaScript for Form Handling (`app.js` or `form.js`):**
+    - **Form Display:** Implement logic to show/hide the form.
+    - **Pre-filling for Edit:** If an `employeeId` is passed (from the "Edit" button click), retrieve the employee data from `mockEmployees` and populate the form fields.
+    - **Form Submission:** Add an event listener to the "Save" button (or form `submit` event).
+        - Prevent default form submission (`event.preventDefault()`).
+        - Read values from the form fields.
+        - **Validation:**
+            - Implement client-side JavaScript validation for:
+                - Required fields (all fields).
+                - Email format (regex for basic email validation).
+            - Display clear error messages next to invalid fields.
+        - **Data Update/Add:**
+            - If validation passes:
+                - **Edit:** If an `employeeId` was present, find the existing employee in `mockEmployees` and update its properties.
+                - **Add:** If no `employeeId` was present, create a new employee object, assign a unique ID (e.g., `Date.now()`, or a simple incrementing counter), and add it to `mockEmployees`.
+            - After updating/adding, re-render the employee list on the dashboard and clear/hide the form.
+        - **Cancel Button:** Implement logic to clear the form and return to the dashboard.
+
+### Step 5: Filter/Sort/Search Functionality
+
+1. **HTML Elements:**
+    - **Search Bar:** Add an `<input type="text" id="search-input">` at the top of your dashboard.
+    - **Filter Popup/Sidebar:** Create a hidden `div` that will act as your filter panel. Include:
+        - Input fields/dropdowns for First Name, Department, Role.
+        - A "Apply Filter" button.
+    - **Sort Controls:** Add dropdowns or buttons for sorting by First Name and Department.
+2. **JavaScript Logic (`app.js` or `filters.js`):**
+    - **Search:**
+        - Add an `input` event listener to the search bar.
+        - Filter `mockEmployees` based on name (first or last) or email.
+        - Re-render the displayed employees based on the search results.
+    - **Filter:**
+        - Show/hide the filter popup/sidebar when a "Filter" button is clicked.
+        - On "Apply Filter" click:
+            - Read filter criteria from the form.
+            - Apply multiple filters (e.g., if department and role are selected, filter by both).
+            - Re-render the displayed employees.
+    - **Sort:**
+        - Add event listeners to sort controls.
+        - Implement comparison functions for sorting by First Name and Department.
+        - Sort `mockEmployees` accordingly.
+        - Re-render the displayed employees.
+    - **Combine:** Ensure that search, filter, and sort can work in conjunction. The order of operations might be: filter -\> search -\> sort, or whichever makes most sense for your UX.
+
+### Step 6: Pagination or Infinite Scroll
+
+Choose one and implement it. Pagination is generally simpler for this type of assignment.
+
+1. **Pagination (Recommended for simplicity):**
+    - **HTML Elements:**
+        - Add a `div` for pagination controls (e.g., page numbers, "Previous", "Next" buttons, dropdown for items per page).
+        - Dropdown for options: 10, 25, 50, 100 employees per page.
+    - **JavaScript Logic:**
+        - Maintain `currentPage` and `itemsPerPage` variables.
+        - When `currentPage` or `itemsPerPage` changes:
+            - Calculate the subset of `mockEmployees` to display for the current page.
+            - Re-render only that subset.
+            - Update pagination controls (active page, total pages).
+        - Ensure pagination works correctly with filter, sort, and search. You'll apply filters/sorts first, then paginate the *filtered/sorted* results.
+2. **Infinite Scroll (More complex, optional challenge):**
+    - **JavaScript Logic:**
+        - Monitor scroll events on the main content container or window.
+        - When the user scrolls near the bottom:
+            - Load the next "batch" of employees from `mockEmployees`.
+            - Append them to the existing list in the DOM.
+            - Implement a loading indicator to show new data is being fetched.
+            - Handle cases where all data has been loaded.
+
+### Step 7: Responsive Design (CSS)
+
+1. **Media Queries:** Use CSS media queries to adjust layouts for different screen sizes (desktop, tablet, mobile).
+    - `@media (max-width: 768px)` for tablets.
+    - `@media (max-width: 480px)` for mobile.
+2. **Flexible Layouts:**
+    - Use Flexbox or CSS Grid for responsive layouts of employee cards.
+    - Adjust font sizes, padding, and margins.
+    - Consider stacking elements vertically on smaller screens.
+    - Ensure navigation (if any) is mobile-friendly (e.g., hamburger menu).
+
+### Step 8: Code Quality and Modularity
+
+1. **CSS:**
+    - Use BEM (Block Element Modifier) or a similar methodology for class naming to prevent conflicts and improve readability.
+    - Organize your CSS into logical sections (e.g., `base.css`, `layout.css`, `components.css`).
+2. **JavaScript:**
+    - Organize your JavaScript into modules or objects (e.g., `EmployeeManager.js`, `UIController.js`).
+    - Use functions for specific tasks.
+    - Avoid global variables where possible.
+    - Add comments to explain complex logic.
+3. **HTML:**
+    - Keep your HTML semantic and well-structured.
+    - Use appropriate HTML5 tags.
+
+### Step 9: Error Handling & Validations
+
+- **Form Validation:** Ensure clear visual feedback for validation errors (e.g., red borders, error messages next to fields).
+- **User Interactions:**
+    - For deletion, a simple confirmation dialog (`confirm()`) is usually sufficient for a local application.
+    - For editing, the assignment mentions "editing without saving." This implies if a user starts editing and then navigates away without saving, the changes are lost. Your form's "Cancel" button should facilitate this by just closing the form and not saving.
+
+---
+
+### 3. Submission Guidelines - README File
+
+Your `README.md` file is crucial for evaluation.
+
+1. **Setup and Run Instructions:**
+    - Clearly explain how to set up and run your project.
+    - If using Freemarker, mention the prerequisites (e.g., Java, specific server setup) or how you simulated it.
+    - If just using HTML/CSS/JS, mention simply opening `index.html` in a browser.
+2. **Overview of Project Structure:**
+    - Briefly explain your folder structure (e.g., `css`, `js`, `templates`).
+    - Mention key files and their purpose.
+3. **Screenshots (Highly Recommended):**
+    - Include screenshots of your dashboard (desktop, mobile), add/edit form, and filter/sort/search functionality.
+4. **Reflection:**
+    - **Challenges Faced:** Be honest about any difficulties you encountered (e.g., complex JS logic, responsive design quirks, Freemarker integration).
+    - **Improvements:** What would you improve if you had more time? (e.g., more robust error handling, animations, better UI design, more advanced filtering).
+
+---
+
+### 4. Evaluation Criteria Checklist (Self-Assessment)
+
+Use this checklist to review your work before submission:
+
+- **HTML/CSS Quality:**
+    - Is the HTML semantic and well-structured?
+    - Is the CSS clean, organized, and maintainable?
+    - Is the application fully responsive on desktop, tablet, and mobile?
+- **JavaScript Usage:**
+    - Is vanilla JavaScript used effectively for DOM manipulation and interactivity?
+    - Are add, edit, delete operations working correctly?
+    - Are filter, sort, and search functionalities implemented and working?
+    - Is pagination/infinite scroll implemented?
+    - Is form validation robust and user-friendly?
+- **Freemarker Integration:**
+    - Is Freemarker used to render the initial employee list?
+    - Is mock data correctly passed (or simulated as such) to the template?
+- **User Experience (UX) & Interface Design (UI):**
+    - Is the interface intuitive and easy to use?
+    - Does it have a clean and appealing design?
+    - Are error messages clear?
+- **Code Structure & Readability:**
+    - Is the code modular and well-organized?
+    - Are there sufficient comments where necessary?
+    - Is the naming consistent and clear?
+- **Validation Handling:**
+    - Are all required fields validated?
+    - Is email format validated?
+    - Are other interactions (delete/edit without save) handled gracefully?
+
+---
+
+Good luck with your assignment!
