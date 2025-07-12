@@ -53,6 +53,7 @@ EmployeeDirectory/
 
 ![img](https://github.com/yprasad28/EmployeeDirectory1/blob/2c901a96d75a0363c309ce9b01d557c2f23e84b6/Screenshot%202025-07-12%20133345.png)
 ![img](https://github.com/yprasad28/EmployeeDirectory1/blob/c7e9989ebef4ceeb101ecf366607bfe5b76bdb5b/Screenshot%202025-07-12%20133357.png)
+![img](https://github.com/yprasad28/EmployeeDirectory1/blob/78553883f2b8e863f0ea8fcda9b1914c828908b7/Screenshot%202025-07-12%20133413.png)
 
 ---
 
