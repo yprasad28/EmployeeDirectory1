@@ -51,7 +51,7 @@ EmployeeDirectory/
 
 ## Screenshots
 
-![img](Screenshot 2025-07-12 133345.png)
+![img](https://github.com/yprasad28/EmployeeDirectory1/blob/2c901a96d75a0363c309ce9b01d557c2f23e84b6/Screenshot%202025-07-12%20133345.png)
 
 ---
 
